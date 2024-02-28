@@ -22,15 +22,15 @@ public class ApplicationConfiguration {
 		localhost.setDescription("Development environment");
 
 		Contact contact = new Contact();
-		contact.setEmail("info@shopapp.in");
-		contact.setName("UserApp Name");
-		contact.setUrl("https://shopapp.in");
+		contact.setEmail("info@foodapp.in");
+		contact.setName("FoodApp");
+		contact.setUrl("https://foodapp.in");
 
 		License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
 
-		Info info = new Info().title("shopapp RESTful Web Service documentation").version("1.0").contact(contact)
-				.description("This API exposes endpoints to manage shopapp.")
-				.termsOfService("https://shopapp/terms").license(mitLicense);
+		Info info = new Info().title("foodapp RESTful Web Service documentation").version("1.0").contact(contact)
+				.description("This API exposes endpoints to manage foodapp.")
+				.termsOfService("https://foodapp/terms").license(mitLicense);
 
 		return new OpenAPI().info(info).servers(List.of(localhost));
 	}
