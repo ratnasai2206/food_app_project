@@ -31,5 +31,9 @@ public class ItemDao {
 		return itemRepository.findById(itemId).get();
 	}
 	
+	public Items findByItemName(String name) {
+		return itemRepository.findByItemName(name);
+	}
+	
 
 }

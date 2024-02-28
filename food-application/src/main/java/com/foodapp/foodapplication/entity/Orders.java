@@ -1,11 +1,12 @@
 package com.foodapp.foodapplication.entity;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.foodapp.foodapplication.util.OrderStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -33,16 +34,18 @@ public class Orders {
 	private int orderId;
 	
 	@Enumerated(EnumType.STRING)
-	private String status;
+	private OrderStatus status=OrderStatus.PENDING;
 	private double totalAmount;
-	@Enumerated(EnumType.STRING)
 	private String paymentMode;
+	
 	
 	@CreationTimestamp
 	private LocalDateTime createdDateAndTime;
 	
 	@ManyToMany
-	private List<Items> items;
+	private Map<Items,Integer> itemQuantity;
+	
+	private int totalQuantity;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn

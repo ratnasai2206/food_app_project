@@ -6,4 +6,5 @@ import com.foodapp.foodapplication.entity.Items;
 
 public interface ItemRepository extends JpaRepository<Items, Integer> {
 
+	Items findByItemName(String itemName);
 }

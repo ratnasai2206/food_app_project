@@ -9,6 +9,7 @@ import com.foodapp.foodapplication.dao.UserDao;
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.excpection.UsersAlreadyExistException;
+import com.foodapp.foodapplication.excpection.UsersNotExistException;
 
 @Service
 public class UserService {
