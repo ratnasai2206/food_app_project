@@ -32,15 +32,17 @@ public class UserService {
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Users>> updateUser(Users users,int userId){
+	public ResponseEntity<ResponseStructure<Users>> updateUser(Users users,int managerId,int userId){
 		Users foundUser=userDao.getUser(userId);
-		if(foundUser!=null) {
+		Users manager=userDao.getUser(managerId);
+		if(foundUser!=null &&(manager.getUserRole().equalsIgnoreCase("BRANCHMANAGER")||manager.getUserRole().equalsIgnoreCase("STAFF"))) {
 			if(users.getUserName()!=null) {
 				foundUser.setUserName(users.getUserName());
 			}
 			if(users.getUserPhone()!=0) {
 				foundUser.setUserPhone(users.getUserPhone());
 			}
+			
 			if(users.getUserRole()!=null) {
 				foundUser.setUserRole(users.getUserRole());
 			}
@@ -57,5 +59,30 @@ public class UserService {
 		
 	}
 	
+	public ResponseEntity<ResponseStructure<Users>> getUsersByUserId(int userId){
+		Users users=userDao.getUser(userId);
+		ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
+		if(users!=null) {
+			responseStructure.setStatusCode(HttpStatus.OK.value());
+			responseStructure.setMessage("Users Found");
+			responseStructure.setData(users);
+			return new ResponseEntity<ResponseStructure<Users>>(responseStructure,HttpStatus.OK);
+		}else {
+			throw new UsersNotExistException("User Not Found");
+		}
+	}
+	
+	public ResponseEntity<ResponseStructure<Users>> getUsersByPhone(long phoneNumber){
+		Users users=userDao.getUserByPhoneNumber(phoneNumber);
+		ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
+		if(users!=null) {
+			responseStructure.setStatusCode(HttpStatus.OK.value());
+			responseStructure.setMessage("Users Found");
+			responseStructure.setData(users);
+			return new ResponseEntity<ResponseStructure<Users>>(responseStructure,HttpStatus.OK);
+		}else {
+			throw new UsersNotExistException("User Not Found");
+		}
+	}
 	
 }
