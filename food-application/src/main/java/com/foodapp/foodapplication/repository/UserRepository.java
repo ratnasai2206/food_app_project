@@ -10,4 +10,5 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
 
 	@Query("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber")
 	Users findByPhoneNumber(@Param("phoneNumber") long phoneNumber);
+	
 }

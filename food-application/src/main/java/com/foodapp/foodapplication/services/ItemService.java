@@ -64,8 +64,8 @@ public class ItemService {
 				items.get().setItemType(item.getItemType());
 				;
 			}
-			if (item.getQuantity() != 0) {
-				items.get().setQuantity(item.getQuantity());
+			if (item.getAvailableQuantity() != 0) {
+				items.get().setAvailableQuantity(item.getAvailableQuantity());
 			}
 			recievedItems = itemDao.saveItems(items.get());
 		} else {

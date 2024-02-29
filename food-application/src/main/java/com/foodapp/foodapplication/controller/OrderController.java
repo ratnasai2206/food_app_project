@@ -1,7 +1,11 @@
 package com.foodapp.foodapplication.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,5 +33,19 @@ public class OrderController {
 	public ResponseEntity<ResponseStructure<Orders>> placeOrder(@RequestBody OrderRequest request ) {
 		return orderService.placeOrder(request);
 	}
-
+	
+	@GetMapping("/{orderId}")
+	public ResponseEntity<ResponseStructure<Orders>> findById(@PathVariable int orderId) {
+		return orderService.findById(orderId);
+	}
+	
+	@DeleteMapping("/{orderId}")
+	public ResponseEntity<ResponseStructure<String>> removeById(@PathVariable int orderId) {
+			return orderService.removeById(orderId);
+	}
+	 
 }
+	
+	
+	
+	

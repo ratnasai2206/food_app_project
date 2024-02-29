@@ -21,6 +21,6 @@ public class Items {
 	private double itemPrice;
 	private String itemType;
 	private boolean isAvailable;
-	private int quantity;
+	private int availableQuantity;
 	
 }
