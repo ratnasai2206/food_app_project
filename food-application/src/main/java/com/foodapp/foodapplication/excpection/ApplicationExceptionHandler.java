@@ -22,4 +22,13 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.FOUND);
 	}
 	
+	@ExceptionHandler(ItemNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> catchItemNotFoundException(ItemNotFoundException notFoundException){
+		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+		responseStructure.setMessage("Item Not found");
+		responseStructure.setStatusCode(HttpStatus.FOUND.value());
+		responseStructure.setData(notFoundException.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.FOUND);
+	}
+	
 }
