@@ -51,7 +51,7 @@ public class Orders {
 	@JoinColumn
 	private Review review;
 	
-	@JsonIgnore
+	
 	@ManyToOne
 	@JoinColumn
 	private Users user;
