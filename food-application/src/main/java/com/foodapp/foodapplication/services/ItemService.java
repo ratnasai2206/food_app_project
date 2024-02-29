@@ -36,6 +36,7 @@ public class ItemService {
 		Optional<Users> user = userRepository.findById(userId);
 		if (user.isPresent()) {
 			if (user.get().getUserRole() == UserRoles.BRANCHMANAGER) {
+				item.setAvailable(true);
 				recievedItems = itemDao.saveItems(item);
 			}
 		} else {
