@@ -77,7 +77,7 @@ public class UserController {
 			@ApiResponse(content = @Content(), responseCode = "400") })
 
 	@PutMapping("staff/{managerId}/{userId}")
-	public ResponseEntity<ResponseStructure<Users>> updateStaff(@RequestBody Users user, @PathVariable int managerId,
+	public ResponseEntity<ResponseStructure<Users>> updateStaff(@RequestBody UserDto user, @PathVariable int managerId,
 
 			@PathVariable int userId) {
 		return userService.updateStaff(user, managerId, userId);
