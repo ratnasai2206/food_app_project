@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.foodapp.foodapplication.dao.ItemDao;
 import com.foodapp.foodapplication.dto.ResponseStructure;
@@ -15,7 +16,7 @@ import com.foodapp.foodapplication.excpection.ItemNotFoundException;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
 import com.foodapp.foodapplication.repository.ItemRepository;
 import com.foodapp.foodapplication.repository.UserRepository;
-
+@Service
 public class ItemService {
 
 	@Autowired
@@ -27,6 +28,7 @@ public class ItemService {
 	@Autowired
 	private ItemDao itemDao;
 
+	//Performs save operation and returns Item created Response
 	public ResponseEntity<ResponseStructure<Items>> saveItem(Items item, int userId) {
 
 		Items recievedItems = null;
@@ -48,6 +50,7 @@ public class ItemService {
 
 	}
 
+	//Performs update operation and returns Item updated Response
 	public ResponseEntity<ResponseStructure<Items>> updateItem(Items item, int userId, int itemId) {
 
 		Items recievedItems = null;
@@ -70,7 +73,7 @@ public class ItemService {
 			recievedItems = itemDao.saveItems(items.get());
 		} else {
 			throw new UsersNotExistException("Not Authorized to perform this operation");
-		}
+	}
 
 		ResponseStructure<Items> response = new ResponseStructure<Items>();
 		response.setStatusCode(HttpStatus.OK.value());
@@ -81,6 +84,7 @@ public class ItemService {
 
 	}
 
+	//Performs get operation and returns Item List fetched Response
 	public ResponseEntity<ResponseStructure<List<Items>>> getAllItems() {
 		List<Items> itemList = itemDao.getAllItems();
 
@@ -92,6 +96,7 @@ public class ItemService {
 		return new ResponseEntity<ResponseStructure<List<Items>>>(response, HttpStatus.OK);
 	}
 
+	//Performs save operation and returns Item created Response
 	public ResponseEntity<ResponseStructure<String>> deleteItem(int userId, int itemId) {
 
 		Optional<Items> items = itemRepository.findById(itemId);
@@ -117,19 +122,18 @@ public class ItemService {
 
 	}
 
+	//Performs get operation and returns Item fetched by ID Response
 	public ResponseEntity<ResponseStructure<Items>> getItemById(int itemId) {
-		
+
 		Items recievedItem = null;
-		
+
 		Optional<Items> items = itemRepository.findById(itemId);
 		if (items.isPresent()) {
-				recievedItem = itemDao.getItemById(itemId);
-		}
-		else
-		{
+			recievedItem = itemDao.getItemById(itemId);
+		} else {
 			throw new ItemNotFoundException();
 		}
-		
+
 		ResponseStructure<Items> response = new ResponseStructure<Items>();
 		response.setStatusCode(HttpStatus.OK.value());
 		response.setMessage("Success");
@@ -137,7 +141,6 @@ public class ItemService {
 
 		return new ResponseEntity<ResponseStructure<Items>>(response, HttpStatus.OK);
 
-		
 	}
 
 }

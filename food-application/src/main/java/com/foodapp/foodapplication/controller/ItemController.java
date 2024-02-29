@@ -45,16 +45,16 @@ public class ItemController {
 		return itemService.getAllItems();
 
 	}
-	
+
 	@DeleteMapping("/{userId}/{itemId}")
 	public ResponseEntity<ResponseStructure<String>> deleteItem(@PathVariable int userId, @PathVariable int itemId) {
 
 		return itemService.deleteItem(userId, itemId);
 
 	}
-	
-	@GetMapping("/")
-	public ResponseEntity<ResponseStructure<Items> getItemById(@PathVariable int itemId) {
+
+	@GetMapping("/{itemId}")
+	public ResponseEntity<ResponseStructure<Items>> getItemById(@PathVariable int itemId) {
 
 		return itemService.getItemById(itemId);
 
