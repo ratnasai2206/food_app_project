@@ -4,7 +4,7 @@ package com.foodapp.foodapplication.excpection;
 
 public class UsersAlreadyExistException extends RuntimeException {
 
-	private String message="Id is not present";
+	private String message="User Already  present";
 	
 	public UsersAlreadyExistException() {
 		

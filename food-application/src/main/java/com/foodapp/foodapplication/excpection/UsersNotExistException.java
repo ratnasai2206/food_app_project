@@ -2,7 +2,7 @@ package com.foodapp.foodapplication.excpection;
 
 public class UsersNotExistException extends RuntimeException{
 
-	private String message="Id is not present";
+	private String message="Users not present";
 
 	public UsersNotExistException() {
 		
