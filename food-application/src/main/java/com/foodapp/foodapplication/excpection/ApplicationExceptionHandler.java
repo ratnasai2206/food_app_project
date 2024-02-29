@@ -22,6 +22,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 	}
 	
 <<<<<<< HEAD
+<<<<<<< HEAD
 	
 	@ExceptionHandler(EmptyOderException.class)
 	public ResponseEntity<ResponseStructure<String>> catchEmptyOrderException(EmptyOderException emptyexception){
@@ -32,6 +33,18 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
 	}
 =======
+=======
+
+	@ExceptionHandler(UsersNotExistException.class)
+	public ResponseEntity<ResponseStructure<String>> catchUserNotExitException(UsersNotExistException doesNotPresentException){
+		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+		responseStructure.setMessage("User Not Exists in the data base");
+		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setData(doesNotPresentException.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
+	}
+	
+>>>>>>> 84be797bd797aab13a0abf2cfa1fe3a7187c1889
 	@ExceptionHandler(ItemNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> catchItemNotFoundException(ItemNotFoundException notFoundException){
 		ResponseStructure<String> responseStructure=new ResponseStructure<String>();

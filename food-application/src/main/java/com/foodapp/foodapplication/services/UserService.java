@@ -18,9 +18,26 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public ResponseEntity<ResponseStructure<Users>> saveUser(Users users) {
+	public ResponseEntity<ResponseStructure<Users>> saveCustomer(Users users) {
 		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
 		if(foundUser==null) {
+			users.setUserRole(UserRoles.CUSTOMER);
+			Users recivedUsers=userDao.saveUser(users);
+			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
+			responseStructure.setStatusCode(HttpStatus.CREATED.value());
+			responseStructure.setMessage("Success");
+			responseStructure.setData(recivedUsers);
+			return new ResponseEntity<ResponseStructure<Users>>(responseStructure,HttpStatus.CREATED);
+		}else {
+			throw new UsersAlreadyExistException("User Already Found") ;
+		}
+		
+	}
+	
+	public ResponseEntity<ResponseStructure<Users>> saveStaff(Users users) {
+		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
+		if(foundUser==null) {
+			users.setUserRole(UserRoles.STAFF);
 			Users recivedUsers=userDao.saveUser(users);
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
 			responseStructure.setStatusCode(HttpStatus.CREATED.value());
