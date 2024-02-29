@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.foodapp.foodapplication.util.UserRoles;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,7 +25,6 @@ public class Users {
 	@SequenceGenerator(name = "user_id", initialValue = 1, allocationSize = 1, sequenceName = "user_sequence")
 	private int userId;
 	private String userName;
-	@Column(unique = true)
 	private long userPhone;
 	@Enumerated(EnumType.STRING)
 	private UserRoles  userRole;
