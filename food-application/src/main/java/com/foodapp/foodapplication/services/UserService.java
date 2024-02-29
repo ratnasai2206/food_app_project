@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.foodapp.foodapplication.dao.UserDao;
 import com.foodapp.foodapplication.dto.ResponseStructure;
+import com.foodapp.foodapplication.dto.UserDto;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.excpection.UsersAlreadyExistException;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
@@ -18,11 +19,16 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public ResponseEntity<ResponseStructure<Users>> saveCustomer(Users users) {
+	public ResponseEntity<ResponseStructure<Users>> saveCustomer(UserDto users) {
 		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
+		System.out.println(users.getUserPhone());
 		if(foundUser==null) {
-			users.setUserRole(UserRoles.CUSTOMER);
-			Users recivedUsers=userDao.saveUser(users);
+			Users user=new Users();
+			user.setUserRole(UserRoles.CUSTOMER);
+			user.setUserName(users.userName);
+			user.setUserPhone(users.userPhone);
+			Users recivedUsers=userDao.saveUser(user);
+			
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
 			responseStructure.setStatusCode(HttpStatus.CREATED.value());
 			responseStructure.setMessage("Success");
@@ -34,9 +40,12 @@ public class UserService {
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Users>> saveStaff(Users users) {
-		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
+	public ResponseEntity<ResponseStructure<Users>> saveStaff(UserDto user) {
+		Users foundUser=userDao.getUserByPhoneNumber(user.getUserPhone());
 		if(foundUser==null) {
+			Users users =new Users();
+			users.setUserName(user.userName);
+			users.setUserPhone(user.userPhone);
 			users.setUserRole(UserRoles.STAFF);
 			Users recivedUsers=userDao.saveUser(users);
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
@@ -50,7 +59,7 @@ public class UserService {
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Users>> updateCustomer(Users users,int managerId,int userId){
+	public ResponseEntity<ResponseStructure<Users>> updateCustomer(UserDto users,int managerId,int userId){
 		Users foundUser=userDao.getUser(userId);
 		Users manager=userDao.getUser(managerId);
 		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER||manager.getUserRole()==UserRoles.STAFF)) {
@@ -75,15 +84,15 @@ public class UserService {
 	}
 	
 	
-	public ResponseEntity<ResponseStructure<Users>> updateStaff(Users users,int managerId,int userId){
+	public ResponseEntity<ResponseStructure<Users>> updateStaff(UserDto user,int managerId,int userId){
 		Users foundUser=userDao.getUser(userId);
 		Users manager=userDao.getUser(managerId);
 		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER)) {
-			if(users.getUserName()!=null) {
-				foundUser.setUserName(users.getUserName());
+			if(user.getUserName()!=null) {
+				foundUser.setUserName(user.getUserName());
 			}
-			if(users.getUserPhone()!=0) {
-				foundUser.setUserPhone(users.getUserPhone());
+			if(user.getUserPhone()!=0) {
+				foundUser.setUserPhone(user.getUserPhone());
 			}
 			Users updatedUser=userDao.saveUser(foundUser);
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();

@@ -16,12 +16,11 @@ public class SeedConfig implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		if(repository.count()==0) {
-			Users user=new Users();
+		if (repository.count() == 0) {
+			Users user = new Users();
 			user.setUserName("manager");
 			user.setUserPhone(999999999);
 			user.setUserRole(UserRoles.BRANCHMANAGER);
-			
 			repository.save(user);
 		}
 	}
