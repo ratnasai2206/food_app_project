@@ -2,6 +2,8 @@ package com.foodapp.foodapplication.entity;
 
 import java.util.List;
 
+import com.foodapp.foodapplication.util.UserRoles;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,7 +29,7 @@ public class Users {
 	@Column(unique = true)
 	private long userPhone;
 	@Enumerated(EnumType.STRING)
-	private String userRole;
+	private UserRoles  userRole;
 
 	@OneToMany(mappedBy = "user")
 	private List<Orders> orders;

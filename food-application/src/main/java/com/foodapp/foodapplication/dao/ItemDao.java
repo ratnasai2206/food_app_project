@@ -3,10 +3,12 @@ package com.foodapp.foodapplication.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.foodapp.foodapplication.entity.Items;
 import com.foodapp.foodapplication.repository.ItemRepository;
 
+@Repository
 public class ItemDao {
 
 	@Autowired
@@ -29,6 +31,10 @@ public class ItemDao {
 	public Items getItemById(int itemId) {
 		
 		return itemRepository.findById(itemId).get();
+	}
+	
+	public Items findByItemName(String name) {
+		return itemRepository.findByItemName(name);
 	}
 	
 

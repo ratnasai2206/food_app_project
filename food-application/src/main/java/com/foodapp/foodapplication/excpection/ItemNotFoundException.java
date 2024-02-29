@@ -9,4 +9,14 @@ String message = "ID Not found";
 	{
 		return message;
 	}
+	
+	public ItemNotFoundException() {
+
+	}
+
+	public ItemNotFoundException(String message) {
+		this.message = message;
+	}
+	
+	
 }
