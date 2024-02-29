@@ -21,6 +21,8 @@ public class SeedConfig implements CommandLineRunner {
 			user.setUserName("manager");
 			user.setUserPhone(999999999);
 			user.setUserRole(UserRoles.BRANCHMANAGER);
+			
+			repository.save(user);
 		}
 	}
 
