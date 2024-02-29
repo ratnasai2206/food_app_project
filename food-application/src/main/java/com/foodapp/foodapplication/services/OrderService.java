@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.foodapp.foodapplication.dao.ItemDao;
 import com.foodapp.foodapplication.dao.OrderDao;
 import com.foodapp.foodapplication.dao.UserDao;
+import com.foodapp.foodapplication.dto.OrderDto;
 import com.foodapp.foodapplication.dto.OrderRequest;
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Items;
@@ -26,6 +27,9 @@ import com.foodapp.foodapplication.util.OrderStatus;
 public class OrderService {
 
 	@Autowired
+	private QuantityRepository quantityRepository;
+	
+	@Autowired
 	private OrderDao orderDao;
 
 	@Autowired
@@ -34,7 +38,7 @@ public class OrderService {
 	@Autowired
 	private ItemDao itemDao;
 
-	public ResponseEntity<ResponseStructure<Orders>> placeOrder(OrderRequest request){
+	public ResponseEntity<ResponseStructure<OrderDto>> placeOrder(OrderRequest request){
 		Orders order = new Orders();
 		Users user = userDao.getUser(request.getUserId());
 		
@@ -59,6 +63,8 @@ public class OrderService {
 						Quantity quantityObj = new Quantity();
 						quantityObj.setQuantity(quantity);
 						itemAndQuantity.put(item, quantityObj);
+						
+						quantityRepository.save(quantityObj);
 						
 						//reduce and set the available quantity of the item and merge 
 						int reducedItemQuantiy = item.getAvailableQuantity()-quantity;
@@ -91,12 +97,27 @@ public class OrderService {
 			
 			orderDao.placeOrder(order);
 			
-			ResponseStructure<Orders> structure = new ResponseStructure<Orders>();
+			//for customized response ,use OrderDto
+			Map<String,Quantity> itemWithNameAndQuantity = new LinkedHashMap<String, Quantity>();
+			for (Map.Entry<Items, Quantity> entry : itemAndQuantity.entrySet()) {
+				String itemName = entry.getKey().getItemName();
+				Quantity quantity = entry.getValue();
+				
+				itemWithNameAndQuantity.put(itemName, quantity);	
+			}
+			OrderDto dto = new OrderDto();
+			dto.setItemQuantity(itemWithNameAndQuantity);
+			dto.setPaymentMode(request.getPaymentMode());
+			dto.setStatus(OrderStatus.COMFIRMED);
+			dto.setTotalAmount(totalAmount);
+			dto.setTotalQuantity(totalQuantity);
+			
+			ResponseStructure<OrderDto> structure = new ResponseStructure<OrderDto>();
 			structure.setStatusCode(HttpStatus.CREATED.value());
 			structure.setMessage("Success");
-			structure.setData(order);
+			structure.setData(dto);
 			
-			return new ResponseEntity<ResponseStructure<Orders>>(structure,HttpStatus.CREATED);
+			return new ResponseEntity<ResponseStructure<OrderDto>>(structure,HttpStatus.CREATED);
 		}
 		else {
 			throw new UsersNotExistException();
