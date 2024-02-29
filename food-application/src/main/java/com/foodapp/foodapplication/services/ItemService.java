@@ -15,6 +15,7 @@ import com.foodapp.foodapplication.excpection.ItemNotFoundException;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
 import com.foodapp.foodapplication.repository.ItemRepository;
 import com.foodapp.foodapplication.repository.UserRepository;
+import com.foodapp.foodapplication.util.UserRoles;
 
 public class ItemService {
 
@@ -32,7 +33,7 @@ public class ItemService {
 		Items recievedItems = null;
 		Optional<Users> user = userRepository.findById(userId);
 		if (user.isPresent()) {
-			if (user.get().getUserRole().equalsIgnoreCase("BRANCHMANGER")) {
+			if (user.get().getUserRole()==UserRoles.BRANCHMANAGER) {
 				recievedItems = itemDao.saveItems(item);
 			}
 		} else {
@@ -53,7 +54,7 @@ public class ItemService {
 		Items recievedItems = null;
 		Optional<Users> user = userRepository.findById(userId);
 		Optional<Items> items = itemRepository.findById(itemId);
-		if (user.isPresent() && items.isPresent() && user.get().getUserRole().equalsIgnoreCase("BRANCHMANGER")) {
+		if (user.isPresent() && items.isPresent() && user.get().getUserRole()==UserRoles.BRANCHMANAGER) {
 			if (item.getItemName() != null) {
 				items.get().setItemName(item.getItemName());
 			}
@@ -98,7 +99,7 @@ public class ItemService {
 		if (items.isPresent()) {
 
 			Optional<Users> user = userRepository.findById(userId);
-			if (user.get() != null && (user.get().getUserRole()).equalsIgnoreCase("BRANCHMANAGER")) {
+			if (user.get() != null && (user.get().getUserRole())==UserRoles.BRANCHMANAGER) {
 				itemDao.deleteItems(items.get());
 
 			} else {

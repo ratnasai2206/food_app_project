@@ -1,5 +1,6 @@
 package com.foodapp.foodapplication.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,6 +18,7 @@ public class Items {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "item_id")
 	@SequenceGenerator(name = "item_id", initialValue = 300, allocationSize = 1, sequenceName = "item_sequence")
 	private int itemID;
+	@Column(unique = true)
 	private String itemName;
 	private double itemPrice;
 	private String itemType;

@@ -10,6 +10,7 @@ import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.excpection.UsersAlreadyExistException;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
+import com.foodapp.foodapplication.util.UserRoles;
 
 @Service
 public class UserService {
@@ -17,9 +18,10 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public ResponseEntity<ResponseStructure<Users>> saveUser(Users users) {
+	public ResponseEntity<ResponseStructure<Users>> saveCustomer(Users users) {
 		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
 		if(foundUser==null) {
+			users.setUserRole(UserRoles.CUSTOMER);
 			Users recivedUsers=userDao.saveUser(users);
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
 			responseStructure.setStatusCode(HttpStatus.CREATED.value());
@@ -32,10 +34,26 @@ public class UserService {
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Users>> updateUser(Users users,int managerId,int userId){
+	public ResponseEntity<ResponseStructure<Users>> saveStaff(Users users) {
+		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
+		if(foundUser==null) {
+			users.setUserRole(UserRoles.STAFF);
+			Users recivedUsers=userDao.saveUser(users);
+			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
+			responseStructure.setStatusCode(HttpStatus.CREATED.value());
+			responseStructure.setMessage("Success");
+			responseStructure.setData(recivedUsers);
+			return new ResponseEntity<ResponseStructure<Users>>(responseStructure,HttpStatus.CREATED);
+		}else {
+			throw new UsersAlreadyExistException("User Already Found") ;
+		}
+		
+	}
+	
+	public ResponseEntity<ResponseStructure<Users>> updateCustomer(Users users,int managerId,int userId){
 		Users foundUser=userDao.getUser(userId);
 		Users manager=userDao.getUser(managerId);
-		if(foundUser!=null &&(manager.getUserRole().equalsIgnoreCase("BRANCHMANAGER")||manager.getUserRole().equalsIgnoreCase("STAFF"))) {
+		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER||manager.getUserRole()==UserRoles.STAFF)) {
 			if(users.getUserName()!=null) {
 				foundUser.setUserName(users.getUserName());
 			}
@@ -43,9 +61,6 @@ public class UserService {
 				foundUser.setUserPhone(users.getUserPhone());
 			}
 			
-			if(users.getUserRole()!=null) {
-				foundUser.setUserRole(users.getUserRole());
-			}
 			Users updatedUser=userDao.saveUser(foundUser);
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
 			responseStructure.setStatusCode(HttpStatus.OK.value());
@@ -58,6 +73,31 @@ public class UserService {
 		}
 		
 	}
+	
+	
+	public ResponseEntity<ResponseStructure<Users>> updateStaff(Users users,int managerId,int userId){
+		Users foundUser=userDao.getUser(userId);
+		Users manager=userDao.getUser(managerId);
+		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER)) {
+			if(users.getUserName()!=null) {
+				foundUser.setUserName(users.getUserName());
+			}
+			if(users.getUserPhone()!=0) {
+				foundUser.setUserPhone(users.getUserPhone());
+			}
+			Users updatedUser=userDao.saveUser(foundUser);
+			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
+			responseStructure.setStatusCode(HttpStatus.OK.value());
+			responseStructure.setMessage("Successfully updated");
+			responseStructure.setData(updatedUser);
+			return new ResponseEntity<ResponseStructure<Users>>(responseStructure,HttpStatus.OK);
+			
+		}else {
+			throw new UsersNotExistException("Staff Not Found");
+		}
+		
+	}
+	
 	
 	public ResponseEntity<ResponseStructure<Users>> getUsersByUserId(int userId){
 		Users users=userDao.getUser(userId);
@@ -84,5 +124,6 @@ public class UserService {
 			throw new UsersNotExistException("User Not Found");
 		}
 	}
+	
 	
 }

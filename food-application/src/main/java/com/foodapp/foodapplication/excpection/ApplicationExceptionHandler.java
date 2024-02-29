@@ -22,6 +22,30 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.FOUND);
 	}
 	
+
+
+	@ExceptionHandler(UsersNotExistException.class)
+	public ResponseEntity<ResponseStructure<String>> catchUserNotExitException(UsersNotExistException doesNotPresentException){
+		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+		responseStructure.setMessage("User Not Exists in the data base");
+		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setData(doesNotPresentException.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
+	}
+	
+
+
+	
+	@ExceptionHandler(EmptyOderException.class)
+	public ResponseEntity<ResponseStructure<String>> catchEmptyOrderException(EmptyOderException emptyexception){
+		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+		responseStructure.setMessage("User Order is empty");
+		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setData(emptyexception.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
+	}
+
+
 	@ExceptionHandler(ItemNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> catchItemNotFoundException(ItemNotFoundException notFoundException){
 		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
@@ -40,4 +64,15 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_ACCEPTABLE);
 	}
 	
+	
+      @ExceptionHandler(IdNotFoundException.class)
+     public ResponseEntity<ResponseStructure<String>> catchIdNotFound(IdNotFoundException idnotfoundexception)
+  {
+	ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+	responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+	responseStructure.setMessage("Manager Id is not present");
+	responseStructure.setData(idnotfoundexception.getMessage());
+	return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
+  }
+
 }
