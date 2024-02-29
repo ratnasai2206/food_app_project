@@ -53,6 +53,7 @@ public class UserController {
 			@ApiResponse(content = @Content(), responseCode = "400") })
 
 	@PostMapping("/staff")
+
 	public ResponseEntity<ResponseStructure<Users>> saveStaff(@RequestBody UserDto user) {
 		return userService.saveStaff(user);
 	}
