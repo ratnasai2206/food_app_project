@@ -50,7 +50,7 @@ public class UserService {
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Users>> updateUser(Users users,int managerId,int userId){
+	public ResponseEntity<ResponseStructure<Users>> updateCustomer(Users users,int managerId,int userId){
 		Users foundUser=userDao.getUser(userId);
 		Users manager=userDao.getUser(managerId);
 		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER||manager.getUserRole()==UserRoles.STAFF)) {
@@ -73,6 +73,31 @@ public class UserService {
 		}
 		
 	}
+	
+	
+	public ResponseEntity<ResponseStructure<Users>> updateStaff(Users users,int managerId,int userId){
+		Users foundUser=userDao.getUser(userId);
+		Users manager=userDao.getUser(managerId);
+		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER)) {
+			if(users.getUserName()!=null) {
+				foundUser.setUserName(users.getUserName());
+			}
+			if(users.getUserPhone()!=0) {
+				foundUser.setUserPhone(users.getUserPhone());
+			}
+			Users updatedUser=userDao.saveUser(foundUser);
+			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
+			responseStructure.setStatusCode(HttpStatus.OK.value());
+			responseStructure.setMessage("Successfully updated");
+			responseStructure.setData(updatedUser);
+			return new ResponseEntity<ResponseStructure<Users>>(responseStructure,HttpStatus.OK);
+			
+		}else {
+			throw new UsersNotExistException("Staff Not Found");
+		}
+		
+	}
+	
 	
 	public ResponseEntity<ResponseStructure<Users>> getUsersByUserId(int userId){
 		Users users=userDao.getUser(userId);
