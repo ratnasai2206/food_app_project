@@ -13,6 +13,6 @@ public class OrderDao {
 	private OrderRepository repository;
 	
 	public Orders placeOrder(Orders order) {
-		return null;
+		return repository.save(order);
 	}
 }

@@ -8,7 +8,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.foodapp.foodapplication.dto.ResponseStructure;
 
-
 @ControllerAdvice
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 	
@@ -22,6 +21,7 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.FOUND);
 	}
 	
+<<<<<<< HEAD
 	
 	@ExceptionHandler(EmptyOderException.class)
 	public ResponseEntity<ResponseStructure<String>> catchEmptyOrderException(EmptyOderException emptyexception){
@@ -31,4 +31,27 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		responseStructure.setData(emptyexception.getMessage());
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
 	}
+=======
+	@ExceptionHandler(ItemNotFoundException.class)
+	public ResponseEntity<ResponseStructure<String>> catchItemNotFoundException(ItemNotFoundException notFoundException){
+		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+		responseStructure.setMessage("Item Not found");
+		responseStructure.setStatusCode(HttpStatus.FOUND.value());
+		responseStructure.setData(notFoundException.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.FOUND);
+	}
+	
+>>>>>>> e45cd93dea4e9e6cefd38d4066523861a10af394
+
+
+
+      @ExceptionHandler(IdNotFoundException.class)
+     public ResponseEntity<ResponseStructure<String>> catchIdNotFound(IdNotFoundException idnotfoundexception)
+  {
+	ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+	responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+	responseStructure.setMessage("Manager Id is not present");
+	responseStructure.setData(idnotfoundexception.getMessage());
+	return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
+  }
 }
