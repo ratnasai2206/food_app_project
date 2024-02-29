@@ -1,15 +1,12 @@
 package com.foodapp.foodapplication.services;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import com.foodapp.foodapplication.dao.ItemDao;
 import com.foodapp.foodapplication.dao.OrderDao;
@@ -18,6 +15,7 @@ import com.foodapp.foodapplication.dto.OrderRequest;
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Items;
 import com.foodapp.foodapplication.entity.Orders;
+import com.foodapp.foodapplication.entity.Quantity;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.excpection.ItemNotFoundException;
 import com.foodapp.foodapplication.excpection.OrderedQuantityNotAvailable;
@@ -43,7 +41,7 @@ public class OrderService {
 		if(user!=null) {
 			//OrderRequest will contain a map of item name and its respective quantity
 			Map<String, Integer> itemNameAndQuantity = request.getItemNameAndQuantity();
-			Map<Items,Integer> itemAndQuantity = new LinkedHashMap<Items, Integer>();
+			Map<Items,Quantity> itemAndQuantity = new LinkedHashMap<Items, Quantity>();
 			int totalQuantity = 0;
 			double totalAmount = 0;
 			for (Map.Entry<String, Integer> entry : itemNameAndQuantity.entrySet()) {
@@ -53,11 +51,14 @@ public class OrderService {
 				//using OrderRequest's map of item name , find all the items as item names are unique
 				Items item = itemDao.findByItemName(itemName);
 				
+				
 				if(item.isAvailable()) {				
 					if(item.getAvailableQuantity()>=quantity) {
 						//add each items price to get total amount
 						totalAmount += item.getItemPrice();
-						itemAndQuantity.put(item, quantity);
+						Quantity quantityObj = new Quantity();
+						quantityObj.setQuantity(quantity);
+						itemAndQuantity.put(item, quantityObj);
 						
 						//reduce and set the available quantity of the item and merge 
 						int reducedItemQuantiy = item.getAvailableQuantity()-quantity;
