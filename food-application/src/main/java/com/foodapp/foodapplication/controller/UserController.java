@@ -47,13 +47,21 @@ public class UserController {
 	
 	
 	@Operation(description = "To Update Users info",summary = "User Details will be updated into the database")
-	@ApiResponses(value = {@ApiResponse(description = "User Updated",responseCode = "200"),
+	@ApiResponses(value = {@ApiResponse(description = "User Details Updated",responseCode = "200"),
 						   @ApiResponse(content = @Content(),responseCode = "400" )})
-	@PutMapping("/{managerId}/{userId}")
-	public ResponseEntity<ResponseStructure<Users>> updateUser(@RequestBody Users user,@PathVariable int managerId,@PathVariable int userId) {
-		return userService.updateUser(null, managerId, userId);
+	@PutMapping("customer/{managerId}/{userId}")
+	public ResponseEntity<ResponseStructure<Users>> updateCustomer(@RequestBody Users user,@PathVariable int managerId,@PathVariable int userId) {
+		return userService.updateCustomer(user, managerId, userId);
 	}
 	
+	
+	@Operation(description = "To Update Staff info",summary = "Staff Details will be updated into the database")
+	@ApiResponses(value = {@ApiResponse(description = "Staff Details Updated",responseCode = "200"),
+						   @ApiResponse(content = @Content(),responseCode = "400" )})
+	@PutMapping("staff/{managerId}/{userId}")
+	public ResponseEntity<ResponseStructure<Users>> updateStaff(@RequestBody Users user,@PathVariable int managerId,@PathVariable int userId){
+		return userService.updateStaff(user, managerId, userId);
+	}
 	
 	
 	@Operation(description = "To by user by user phone number",summary = "User will be get from the database")
