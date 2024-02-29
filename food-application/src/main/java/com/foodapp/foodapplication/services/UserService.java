@@ -40,9 +40,12 @@ public class UserService {
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Users>> saveStaff(Users users) {
-		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
+	public ResponseEntity<ResponseStructure<Users>> saveStaff(UserDto user) {
+		Users foundUser=userDao.getUserByPhoneNumber(user.getUserPhone());
 		if(foundUser==null) {
+			Users users =new Users();
+			users.setUserName(user.userName);
+			users.setUserPhone(user.userPhone);
 			users.setUserRole(UserRoles.STAFF);
 			Users recivedUsers=userDao.saveUser(users);
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
@@ -56,7 +59,7 @@ public class UserService {
 		
 	}
 	
-	public ResponseEntity<ResponseStructure<Users>> updateCustomer(Users users,int managerId,int userId){
+	public ResponseEntity<ResponseStructure<Users>> updateCustomer(UserDto users,int managerId,int userId){
 		Users foundUser=userDao.getUser(userId);
 		Users manager=userDao.getUser(managerId);
 		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER||manager.getUserRole()==UserRoles.STAFF)) {

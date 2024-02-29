@@ -53,7 +53,7 @@ public class UserController {
 			@ApiResponse(content = @Content(), responseCode = "400") })
 
 	@PostMapping("/staff")
-	public ResponseEntity<ResponseStructure<Users>> saveStaff(@RequestBody Users user) {
+	public ResponseEntity<ResponseStructure<Users>> saveStaff(@RequestBody UserDto user) {
 		return userService.saveStaff(user);
 	}
 
@@ -64,7 +64,7 @@ public class UserController {
 			@ApiResponse(content = @Content(), responseCode = "400") })
 
 	@PutMapping("customer/{managerId}/{userId}")
-	public ResponseEntity<ResponseStructure<Users>> updateCustomer(@RequestBody Users user, @PathVariable int managerId,
+	public ResponseEntity<ResponseStructure<Users>> updateCustomer(@RequestBody UserDto user, @PathVariable int managerId,
 
 			@PathVariable int userId) {
 		return userService.updateCustomer(user, managerId, userId);
