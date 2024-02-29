@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.foodapp.foodapplication.dao.UserDao;
 import com.foodapp.foodapplication.dto.ResponseStructure;
+import com.foodapp.foodapplication.dto.UserDto;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.excpection.UsersAlreadyExistException;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
@@ -18,11 +19,16 @@ public class UserService {
 	@Autowired
 	private UserDao userDao;
 	
-	public ResponseEntity<ResponseStructure<Users>> saveCustomer(Users users) {
+	public ResponseEntity<ResponseStructure<Users>> saveCustomer(UserDto users) {
 		Users foundUser=userDao.getUserByPhoneNumber(users.getUserPhone());
+		System.out.println(users.getUserPhone());
 		if(foundUser==null) {
-			users.setUserRole(UserRoles.CUSTOMER);
-			Users recivedUsers=userDao.saveUser(users);
+			Users user=new Users();
+			user.setUserRole(UserRoles.CUSTOMER);
+			user.setUserName(users.userName);
+			user.setUserPhone(users.userPhone);
+			Users recivedUsers=userDao.saveUser(user);
+			
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
 			responseStructure.setStatusCode(HttpStatus.CREATED.value());
 			responseStructure.setMessage("Success");
