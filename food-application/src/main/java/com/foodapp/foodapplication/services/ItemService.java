@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 
 import com.foodapp.foodapplication.dao.ItemDao;
 import com.foodapp.foodapplication.dto.ResponseStructure;
@@ -17,6 +18,7 @@ import com.foodapp.foodapplication.repository.ItemRepository;
 import com.foodapp.foodapplication.repository.UserRepository;
 import com.foodapp.foodapplication.util.UserRoles;
 
+@Service
 public class ItemService {
 
 	@Autowired
