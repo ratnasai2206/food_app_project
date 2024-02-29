@@ -22,6 +22,16 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.FOUND);
 	}
 	
+
+	@ExceptionHandler(UsersNotExistException.class)
+	public ResponseEntity<ResponseStructure<String>> catchUserNotExitException(UsersNotExistException doesNotPresentException){
+		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
+		responseStructure.setMessage("User Not Exists in the data base");
+		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
+		responseStructure.setData(doesNotPresentException.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure,HttpStatus.NOT_FOUND);
+	}
+	
 	@ExceptionHandler(ItemNotFoundException.class)
 	public ResponseEntity<ResponseStructure<String>> catchItemNotFoundException(ItemNotFoundException notFoundException){
 		ResponseStructure<String> responseStructure=new ResponseStructure<String>();
