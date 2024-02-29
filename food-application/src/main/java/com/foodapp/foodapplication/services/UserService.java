@@ -10,6 +10,7 @@ import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.excpection.UsersAlreadyExistException;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
+import com.foodapp.foodapplication.util.UserRoles;
 
 @Service
 public class UserService {
@@ -35,7 +36,7 @@ public class UserService {
 	public ResponseEntity<ResponseStructure<Users>> updateUser(Users users,int managerId,int userId){
 		Users foundUser=userDao.getUser(userId);
 		Users manager=userDao.getUser(managerId);
-		if(foundUser!=null &&(manager.getUserRole().equalsIgnoreCase("BRANCHMANAGER")||manager.getUserRole().equalsIgnoreCase("STAFF"))) {
+		if(foundUser!=null &&(manager.getUserRole()==UserRoles.BRANCHMANAGER||manager.getUserRole()==UserRoles.STAFF)) {
 			if(users.getUserName()!=null) {
 				foundUser.setUserName(users.getUserName());
 			}
@@ -43,9 +44,6 @@ public class UserService {
 				foundUser.setUserPhone(users.getUserPhone());
 			}
 			
-			if(users.getUserRole()!=null) {
-				foundUser.setUserRole(users.getUserRole());
-			}
 			Users updatedUser=userDao.saveUser(foundUser);
 			ResponseStructure<Users> responseStructure=new ResponseStructure<Users>();
 			responseStructure.setStatusCode(HttpStatus.OK.value());
@@ -84,5 +82,6 @@ public class UserService {
 			throw new UsersNotExistException("User Not Found");
 		}
 	}
+	
 	
 }
