@@ -1,7 +1,5 @@
 package com.foodapp.foodapplication.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.foodapp.foodapplication.dao.OrderDao;
+import com.foodapp.foodapplication.dto.OrderDto;
 import com.foodapp.foodapplication.dto.OrderRequest;
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Orders;
@@ -29,8 +28,8 @@ public class OrderController {
 	private OrderService orderService;
 	
 
-	@PostMapping
-	public ResponseEntity<ResponseStructure<Orders>> placeOrder(@RequestBody OrderRequest request ) {
+	@PostMapping("/customer")
+	public ResponseEntity<ResponseStructure<OrderDto>> placeOrder(@RequestBody OrderRequest request ) {
 		return orderService.placeOrder(request);
 	}
 	
