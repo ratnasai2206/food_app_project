@@ -53,7 +53,7 @@ public class ItemController {
 
 	}
 	
-	@GetMapping("/")
+	@GetMapping("/{itemId}")
 	public ResponseEntity<ResponseStructure<Items>> getItemById(@PathVariable int itemId) {
 
 		return itemService.getItemById(itemId);
