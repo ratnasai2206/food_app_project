@@ -17,6 +17,11 @@ import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Items;
 import com.foodapp.foodapplication.services.ItemService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/foodapp/items")
 public class ItemController {
@@ -24,12 +29,24 @@ public class ItemController {
 	@Autowired
 	private ItemService itemService;
 
+	@Operation(description = "To Create Item info", summary = "Item will be saved in the database")
+
+	@ApiResponses(value = { @ApiResponse(description = "item Created", responseCode = "201"),
+
+			@ApiResponse(content = @Content(), responseCode = "400") })
+
 	@PostMapping("/{userId}")
 	public ResponseEntity<ResponseStructure<Items>> saveItem(@RequestBody Items item, @PathVariable int userId) {
 
 		return itemService.saveItem(item, userId);
 
 	}
+
+	@Operation(description = "To Update item info", summary = "Item will be updated in the database")
+
+	@ApiResponses(value = { @ApiResponse(description = "Item Updated", responseCode = "200"),
+
+			@ApiResponse(content = @Content(), responseCode = "400") })
 
 	@PutMapping("/{userId}/{itemId}")
 	public ResponseEntity<ResponseStructure<Items>> updateProduct(@RequestBody Items item, @PathVariable int userId,
@@ -39,6 +56,11 @@ public class ItemController {
 
 	}
 
+	@Operation(description = "To get Items list", summary = "Items list will be fetched from the database")
+
+	@ApiResponses(value = { @ApiResponse(description = "Item found", responseCode = "200"),
+
+			@ApiResponse(content = @Content(), responseCode = "400") })
 	@GetMapping("/")
 	public ResponseEntity<ResponseStructure<List<Items>>> getAllItems() {
 
@@ -46,6 +68,12 @@ public class ItemController {
 
 	}
 
+	@Operation(description = "To Delete by itemId", summary = "Item will be delted from the database")
+
+	@ApiResponses(value = { @ApiResponse(description = "User found", responseCode = "200"),
+
+			@ApiResponse(content = @Content(), responseCode = "400") })
+	
 	@DeleteMapping("/{userId}/{itemId}")
 	public ResponseEntity<ResponseStructure<String>> deleteItem(@PathVariable int userId, @PathVariable int itemId) {
 
@@ -53,6 +81,13 @@ public class ItemController {
 
 	}
 
+
+	@Operation(description = "To get Items by id", summary = "Items list will be fetched from the database")
+
+	@ApiResponses(value = { @ApiResponse(description = "Item found", responseCode = "200"),
+
+			@ApiResponse(content = @Content(), responseCode = "400") })
+	
 	@GetMapping("/{itemId}")
 	public ResponseEntity<ResponseStructure<Items>> getItemById(@PathVariable int itemId) {
 
