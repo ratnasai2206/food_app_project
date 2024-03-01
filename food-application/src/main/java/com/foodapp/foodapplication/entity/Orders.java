@@ -1,7 +1,6 @@
 package com.foodapp.foodapplication.entity;
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,9 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import com.foodapp.foodapplication.util.OrderStatus;
 
 import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,7 +17,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapKeyJoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import lombok.Getter;
