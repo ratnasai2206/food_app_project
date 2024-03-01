@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.dto.UserDto;
+import com.foodapp.foodapplication.entity.Orders;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.services.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
