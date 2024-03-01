@@ -9,6 +9,7 @@ import com.foodapp.foodapplication.entity.Review;
 import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.repository.ReviewRepository;
 import com.foodapp.foodapplication.repository.UserRepository;
+import com.foodapp.foodapplication.util.UserRoles;
 
 @Repository
 public class ReviewDao {
@@ -23,14 +24,29 @@ public class ReviewDao {
 		return reviewRepository.save(review);
 	}
 
-	public String deleteReview(int managerId) {
+	public String deleteReview(int managerId,int reviewId) {
 		Optional<Users> user = userRepository.findById(managerId);
-		if (user.isPresent()) {
-			reviewRepository.deleteById(managerId);
+		if (user.get().getUserRole()==UserRoles.BRANCHMANAGER) {
+			
+			Optional<Review> optional=reviewRepository.findById(reviewId);
+			if(optional.isPresent()) {
+				Review review=optional.get();
+				reviewRepository.delete(review);
+			}
 			return "Review Succesfully Removed";
 		} else {
 			return null;
 		}
 	}
 
+	public Review findById(int reviewId) {
+		
+		Optional<Review> optional=reviewRepository.findById(reviewId);
+		if(optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
+	}
+
+	
 }

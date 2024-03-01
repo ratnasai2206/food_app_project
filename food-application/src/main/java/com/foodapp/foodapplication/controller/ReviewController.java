@@ -24,7 +24,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class ReviewController {
 
 	@Autowired
-	private ReviewService reviewservice;
+	private ReviewService reviewService;
 
 	@Operation(description = "To Create Review Info ", summary = "Review will be saved in the database")
 	@ApiResponses(value = { @ApiResponse(description = "Review Created", responseCode = "201"),
@@ -33,15 +33,15 @@ public class ReviewController {
 	@PostMapping("/{userId}/{orderId}")
 	public ResponseEntity<ResponseStructure<Review>> saveReview(@PathVariable int userId, @PathVariable int orderId,
 			@RequestBody ReviewDto review) {
-		return reviewservice.saveReview(userId, orderId, review);
+		return reviewService.saveReview(userId, orderId, review);
 	}
 
 	@Operation(description = "To Delete Review Info ", summary = "Review will be deleted from the database")
 	@ApiResponses(value = { @ApiResponse(description = "Review Deleted", responseCode = "200"),
 			@ApiResponse(content = @Content(), responseCode = "404") })
-	@DeleteMapping("/{managerId}")
-	public ResponseEntity<ResponseStructure<String>> deleteReview(@PathVariable int managerId) {
-		return reviewservice.deleteReview(managerId);
+	@DeleteMapping("/{managerId}/{reviewId}")
+	public ResponseEntity<ResponseStructure<String>> deleteReview(@PathVariable int managerId,@PathVariable int reviewId) {
+		return reviewService.deleteReview(managerId,reviewId);
 	}
 
 }
