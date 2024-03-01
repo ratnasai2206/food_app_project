@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.foodapp.foodapplication.util.OrderStatus;
 
 import jakarta.persistence.CascadeType;
