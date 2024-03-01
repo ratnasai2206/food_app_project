@@ -10,41 +10,47 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.foodapp.foodapplication.dao.OrderDao;
 import com.foodapp.foodapplication.dto.OrderDto;
 import com.foodapp.foodapplication.dto.OrderRequest;
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Orders;
 import com.foodapp.foodapplication.services.OrderService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
 @RestController
 @RequestMapping("/foodapp/order")
 public class OrderController {
 
 	@Autowired
-	private OrderDao orderDao;
-
-	@Autowired
 	private OrderService orderService;
-	
 
+	
+	@Operation(description = "Place food order",summary = "Specified customer id's order is stored into DB")
+	@ApiResponses(value = {@ApiResponse(description = "Created" , responseCode = "201"),
+							@ApiResponse(content=@Content(), responseCode = "400")})
 	@PostMapping("/customer")
-	public ResponseEntity<ResponseStructure<OrderDto>> placeOrder(@RequestBody OrderRequest request ) {
+	public ResponseEntity<ResponseStructure<OrderDto>> placeOrder(@RequestBody OrderRequest request) {
 		return orderService.placeOrder(request);
 	}
-	
+
+	@Operation(description = "Display placed order ",summary = "Specified customer id's order is retrived from DB")
+	@ApiResponses(value = {@ApiResponse(description = "OK" , responseCode = "200"),
+							@ApiResponse(content=@Content(), responseCode = "404")})
 	@GetMapping("/{orderId}")
 	public ResponseEntity<ResponseStructure<Orders>> findById(@PathVariable int orderId) {
 		return orderService.findById(orderId);
 	}
-	
+
+	@Operation(description = "Cancel placed order",summary = "Specified customer id's order is removed from DB")
+	@ApiResponses(value = {@ApiResponse(description = "Ok" , responseCode = "200"),
+							@ApiResponse(content=@Content(), responseCode = "404")})
 	@DeleteMapping("/{orderId}")
 	public ResponseEntity<ResponseStructure<String>> removeById(@PathVariable int orderId) {
-			return orderService.removeById(orderId);
+		return orderService.removeById(orderId);
 	}
-	 
+
 }
-	
-	
-	
-	
