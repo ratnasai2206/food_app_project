@@ -156,9 +156,4 @@ public class OrderService {
 			throw new ItemNotFoundException("Order Not Found");
 	}
 	
-	
-	
-	//create a method to return total price
-	
-
 }
