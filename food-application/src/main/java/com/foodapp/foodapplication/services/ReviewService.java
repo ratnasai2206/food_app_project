@@ -21,13 +21,14 @@ import com.foodapp.foodapplication.repository.OrderRepository;
 public class ReviewService {
 
 	@Autowired
-	private ReviewDao reviewdao;
+	private ReviewDao reviewDao;
 
 	@Autowired
 	private OrderRepository orderRepository;
-
+	
 	// save review method
 	public ResponseEntity<ResponseStructure<Review>> saveReview(int userId, int orderId, ReviewDto review) {
+		
 		Optional<Orders> order = orderRepository.findById(orderId);
 		if (order.isPresent()) {
 			Orders orderItem = order.get();
@@ -40,7 +41,7 @@ public class ReviewService {
 				reviews.setOrder(orderItem);
 				orderItem.setReview(reviews);
 				
-				Review savedReview = reviewdao.saveReview(reviews);
+				Review savedReview = reviewDao.saveReview(reviews);
 				ResponseStructure<Review> responsestructure = new ResponseStructure<Review>();
 				responsestructure.setStatusCode(HttpStatus.CREATED.value());
 				responsestructure.setMessage("review added");
@@ -55,8 +56,15 @@ public class ReviewService {
 	}
 
 	// delete Review
-	public ResponseEntity<ResponseStructure<String>> deleteReview(int managerId) {
-		String deletedReview = reviewdao.deleteReview(managerId);
+	public ResponseEntity<ResponseStructure<String>> deleteReview(int managerId, int reviewId) {
+		
+		Review review = reviewDao.findById(reviewId);
+		Orders orders=review.getOrder();
+		orders.setReview(null);
+		review.setOrder(orders);
+		reviewDao.saveReview(review);
+		
+		String deletedReview = reviewDao.deleteReview(managerId,reviewId);
 		if (deletedReview != null) {
 			ResponseStructure<String> responsestructure = new ResponseStructure<String>();
 			responsestructure.setStatusCode(HttpStatus.OK.value());

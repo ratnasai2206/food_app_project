@@ -5,6 +5,7 @@ import java.util.List;
 import com.foodapp.foodapplication.util.UserRoles;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,10 +27,12 @@ public class Users {
 	@SequenceGenerator(name = "user_id", initialValue = 1, allocationSize = 1, sequenceName = "user_sequence")
 	private int userId;
 	private String userName;
+	@Column(unique = true)
 	private long userPhone;
 	@Enumerated(EnumType.STRING)
 	private UserRoles  userRole;
 
+	@Schema(hidden = true)
 	@OneToMany(mappedBy = "user")
 	private List<Orders> orders;
 }
