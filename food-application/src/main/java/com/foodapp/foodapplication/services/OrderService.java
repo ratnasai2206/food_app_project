@@ -21,6 +21,7 @@ import com.foodapp.foodapplication.entity.Users;
 import com.foodapp.foodapplication.excpection.ItemNotFoundException;
 import com.foodapp.foodapplication.excpection.OrderedQuantityNotAvailable;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
+import com.foodapp.foodapplication.repository.QuantityRepository;
 import com.foodapp.foodapplication.util.OrderStatus;
 
 @Service
@@ -58,13 +59,15 @@ public class OrderService {
 				
 				if(item.isAvailable()) {				
 					if(item.getAvailableQuantity()>=quantity) {
-						//add each items price to get total amount
-						totalAmount += item.getItemPrice();
+						
 						Quantity quantityObj = new Quantity();
 						quantityObj.setQuantity(quantity);
 						itemAndQuantity.put(item, quantityObj);
 						
 						quantityRepository.save(quantityObj);
+						
+						//add each items price to get total amount
+						totalAmount += (item.getItemPrice()*quantity);
 						
 						//reduce and set the available quantity of the item and merge 
 						int reducedItemQuantiy = item.getAvailableQuantity()-quantity;
@@ -125,19 +128,30 @@ public class OrderService {
 		
 	}
 
-	public ResponseEntity<ResponseStructure<Orders>> findById(int orderId) {
+	public ResponseEntity<ResponseStructure<OrderDto>> findById(int orderId) {
 		Orders order = orderDao.findById(orderId);
-		
-		if(order!=null) {
-			ResponseStructure<Orders> structure = new ResponseStructure<Orders>();
-			structure.setStatusCode(HttpStatus.OK.value());
-			structure.setMessage("OK");
-			structure.setData(order);
+		Map<Items, Quantity> itemAndQuantity = order.getItemQuantity();
+		Map<String,Quantity> itemWithNameAndQuantity = new LinkedHashMap<String, Quantity>();
+		for (Map.Entry<Items, Quantity> entry : itemAndQuantity.entrySet()) {
+			String itemName = entry.getKey().getItemName();
+			Quantity quantity = entry.getValue();
 			
-			return new ResponseEntity<ResponseStructure<Orders>>(structure,HttpStatus.OK);
+			itemWithNameAndQuantity.put(itemName, quantity);	
 		}
-		else
-			throw new ItemNotFoundException("Order Not Found");
+		
+		OrderDto dto = new OrderDto();
+		dto.setStatus(order.getStatus());
+		dto.setPaymentMode(order.getPaymentMode());
+		dto.setItemQuantity(itemWithNameAndQuantity);
+		dto.setTotalAmount(order.getTotalAmount());
+		dto.setTotalQuantity(order.getTotalQuantity());
+		
+		ResponseStructure<OrderDto> structure = new ResponseStructure<OrderDto>();
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setMessage("OK");
+		structure.setData(dto);
+		
+		return new ResponseEntity<ResponseStructure<OrderDto>>(structure,HttpStatus.OK);
 	}
 
 	public ResponseEntity<ResponseStructure<String>> removeById(int orderId) {

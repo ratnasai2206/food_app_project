@@ -30,7 +30,6 @@ public class Users {
 	@Enumerated(EnumType.STRING)
 	private UserRoles  userRole;
 
-	@Schema(hidden = true)
 	@OneToMany(mappedBy = "user")
 	private List<Orders> orders;
 }

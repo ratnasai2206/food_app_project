@@ -13,7 +13,7 @@ import com.foodapp.foodapplication.dto.ReviewDto;
 import com.foodapp.foodapplication.entity.Orders;
 import com.foodapp.foodapplication.entity.Review;
 import com.foodapp.foodapplication.entity.Users;
-import com.foodapp.foodapplication.excpection.EmptyOderException;
+import com.foodapp.foodapplication.excpection.EmptyOrderException;
 import com.foodapp.foodapplication.excpection.IdNotFoundException;
 import com.foodapp.foodapplication.repository.OrderRepository;
 
@@ -47,7 +47,7 @@ public class ReviewService {
 				responsestructure.setData(savedReview);
 				return new ResponseEntity<ResponseStructure<Review>>(responsestructure, HttpStatus.CREATED);
 			} else {
-				throw new EmptyOderException();
+				throw new EmptyOrderException();
 			}
 		} else {
 			throw new IdNotFoundException();
