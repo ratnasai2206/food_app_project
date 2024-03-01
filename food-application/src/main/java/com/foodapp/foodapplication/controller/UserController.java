@@ -41,11 +41,6 @@ public class UserController {
 		return userService.saveCustomer(user);
 	}
 
-	@PostMapping("/save")
-	public String saveUser(@RequestBody Users users) {
-		System.err.println(users);
-		return "hi";
-	}
 
 	@Operation(description = "To Create Staff info", summary = "Staff will be saved in the database")
 
@@ -85,7 +80,7 @@ public class UserController {
 		return userService.updateStaff(user, managerId, userId);
 	}
 
-	@Operation(description = "To by user by user phone number", summary = "User will be get from the database")
+	@Operation(description = "To by user by user phone number", summary = "User will be found from the database")
 
 	@ApiResponses(value = { @ApiResponse(description = "User found", responseCode = "200"),
 
@@ -96,7 +91,7 @@ public class UserController {
 		return userService.getUsersByPhone(phoneNumber);
 	}
 
-	@Operation(description = "To by user by userId", summary = "User will be get from the database")
+	@Operation(description = "To by user by userId", summary = "User will be found from the database")
 
 	@ApiResponses(value = { @ApiResponse(description = "User found", responseCode = "200"),
 
