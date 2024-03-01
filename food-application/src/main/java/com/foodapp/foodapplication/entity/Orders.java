@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.hibernate.annotations.CreationTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.foodapp.foodapplication.util.OrderStatus;
 
 import jakarta.persistence.CascadeType;
@@ -37,10 +38,8 @@ public class Orders {
 	private double totalAmount;
 	private String paymentMode;
 	
-	
 	@CreationTimestamp
 	private LocalDateTime createdDateAndTime;
-	
 	
 	@ManyToMany
 	private Map<Items,Quantity> itemQuantity;
@@ -51,7 +50,7 @@ public class Orders {
 	@JoinColumn
 	private Review review;
 	
-	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn
 	private Users user;

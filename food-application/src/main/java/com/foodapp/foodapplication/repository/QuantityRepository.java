@@ -1,4 +1,4 @@
-package com.foodapp.foodapplication.services;
+package com.foodapp.foodapplication.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

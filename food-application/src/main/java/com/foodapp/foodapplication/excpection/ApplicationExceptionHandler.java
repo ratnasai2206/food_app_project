@@ -31,8 +31,8 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NOT_FOUND);
 	}
 
-	@ExceptionHandler(EmptyOderException.class)
-	public ResponseEntity<ResponseStructure<String>> catchEmptyOrderException(EmptyOderException emptyexception) {
+	@ExceptionHandler(EmptyOrderException.class)
+	public ResponseEntity<ResponseStructure<String>> catchEmptyOrderException(EmptyOrderException emptyexception) {
 		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
 		responseStructure.setMessage("User Order is empty");
 		responseStructure.setStatusCode(HttpStatus.NOT_FOUND.value());
