@@ -1,5 +1,8 @@
 package com.foodapp.foodapplication.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,7 +23,9 @@ public class Review {
 	private int reviewId;
 	private String reviewComment;
 	private double reviewRatings;
-	@OneToOne(mappedBy = "review")
+	
+	@JsonIgnore
+	@OneToOne(mappedBy = "review",cascade = {CascadeType.MERGE,CascadeType.PERSIST})
 	private Orders order;
 
 }

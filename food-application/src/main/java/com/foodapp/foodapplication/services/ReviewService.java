@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.foodapp.foodapplication.dao.ReviewDao;
 import com.foodapp.foodapplication.dto.ResponseStructure;
+import com.foodapp.foodapplication.dto.ReviewDto;
 import com.foodapp.foodapplication.entity.Orders;
 import com.foodapp.foodapplication.entity.Review;
 import com.foodapp.foodapplication.entity.Users;
@@ -26,14 +27,20 @@ public class ReviewService {
 	private OrderRepository orderRepository;
 
 	// save review method
-	public ResponseEntity<ResponseStructure<Review>> saveReview(int userId, int orderId, Review review) {
+	public ResponseEntity<ResponseStructure<Review>> saveReview(int userId, int orderId, ReviewDto review) {
 		Optional<Orders> order = orderRepository.findById(orderId);
 		if (order.isPresent()) {
 			Orders orderItem = order.get();
 			Users user = orderItem.getUser();
 
 			if (user.getUserId() == userId) {
-				Review savedReview = reviewdao.saveReview(review);
+				Review reviews=new Review();
+				reviews.setReviewComment(review.getReviewComment());
+				reviews.setReviewRatings(review.getReviewRatings());
+				reviews.setOrder(orderItem);
+				orderItem.setReview(reviews);
+				
+				Review savedReview = reviewdao.saveReview(reviews);
 				ResponseStructure<Review> responsestructure = new ResponseStructure<Review>();
 				responsestructure.setStatusCode(HttpStatus.CREATED.value());
 				responsestructure.setMessage("review added");
@@ -61,4 +68,5 @@ public class ReviewService {
 		}
 
 	}
+
 }
