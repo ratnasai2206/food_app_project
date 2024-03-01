@@ -28,7 +28,7 @@ public class ReviewController {
 
 	@Operation(description = "To Create Review Info ", summary = "Review will be saved in the database")
 	@ApiResponses(value = { @ApiResponse(description = "Review Created", responseCode = "201"),
-	@ApiResponse(content = @Content(), responseCode = "400") })
+			@ApiResponse(content = @Content(), responseCode = "400") })
 
 	@PostMapping("/{userId}/{orderId}")
 	public ResponseEntity<ResponseStructure<Review>> saveReview(@PathVariable int userId, @PathVariable int orderId,
@@ -37,7 +37,8 @@ public class ReviewController {
 	}
 
 	@Operation(description = "To Delete Review Info ", summary = "Review will be deleted from the database")
-	@ApiResponses(value = @ApiResponse(description = "Review Deleted", responseCode = "200"))
+	@ApiResponses(value = { @ApiResponse(description = "Review Deleted", responseCode = "200"),
+			@ApiResponse(content = @Content(), responseCode = "404") })
 	@DeleteMapping("/{managerId}")
 	public ResponseEntity<ResponseStructure<String>> deleteReview(@PathVariable int managerId) {
 		return reviewservice.deleteReview(managerId);

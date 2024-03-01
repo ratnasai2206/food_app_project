@@ -1,14 +1,18 @@
 package com.foodapp.foodapplication.excpection;
 
-public class EmptyOderException extends RuntimeException {
+public class EmptyOrderException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String message = "Order is empty";
 
-	public EmptyOderException() {
+	public EmptyOrderException() {
 
 	}
 
-	public EmptyOderException(String message) {
+	public EmptyOrderException(String message) {
 		super();
 		this.message = message;
 	}

@@ -14,19 +14,19 @@ import com.foodapp.foodapplication.repository.UserRepository;
 public class ReviewDao {
 
 	@Autowired
-	private ReviewRepository reviewrepository;
+	private ReviewRepository reviewRepository;
 
 	@Autowired
-	private UserRepository userrepository;
+	private UserRepository userRepository;
 
 	public Review saveReview(Review review) {
-		return reviewrepository.save(review);
+		return reviewRepository.save(review);
 	}
 
 	public String deleteReview(int managerId) {
-		Optional<Users> user = userrepository.findById(managerId);
+		Optional<Users> user = userRepository.findById(managerId);
 		if (user.isPresent()) {
-			reviewrepository.deleteById(managerId);
+			reviewRepository.deleteById(managerId);
 			return "Review Succesfully Removed";
 		} else {
 			return null;

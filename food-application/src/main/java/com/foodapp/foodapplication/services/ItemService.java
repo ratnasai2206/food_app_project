@@ -71,6 +71,7 @@ public class ItemService {
 			}
 			if (item.getAvailableQuantity() != 0) {
 				items.get().setAvailableQuantity(item.getAvailableQuantity());
+				items.get().setAvailable(true);
 			}
 			recievedItems = itemDao.saveItems(items.get());
 		} else {
@@ -98,7 +99,7 @@ public class ItemService {
 		return new ResponseEntity<ResponseStructure<List<Items>>>(response, HttpStatus.OK);
 	}
 
-	//Performs save operation and returns Item created Response
+	//Performs delete operations returns String 
 	public ResponseEntity<ResponseStructure<String>> deleteItem(int userId, int itemId) {
 
 		Optional<Items> items = itemRepository.findById(itemId);
