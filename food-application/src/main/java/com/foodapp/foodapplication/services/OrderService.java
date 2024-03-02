@@ -11,17 +11,25 @@ import org.springframework.stereotype.Service;
 import com.foodapp.foodapplication.dao.ItemDao;
 import com.foodapp.foodapplication.dao.OrderDao;
 import com.foodapp.foodapplication.dao.UserDao;
+import com.foodapp.foodapplication.dto.OrderDto;
 import com.foodapp.foodapplication.dto.OrderRequest;
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Items;
 import com.foodapp.foodapplication.entity.Orders;
+import com.foodapp.foodapplication.entity.Quantity;
 import com.foodapp.foodapplication.entity.Users;
+import com.foodapp.foodapplication.excpection.ItemNotFoundException;
+import com.foodapp.foodapplication.excpection.OrderedQuantityNotAvailable;
 import com.foodapp.foodapplication.excpection.UsersNotExistException;
+import com.foodapp.foodapplication.repository.QuantityRepository;
 import com.foodapp.foodapplication.util.OrderStatus;
 
 @Service
 public class OrderService {
 
+	@Autowired
+	private QuantityRepository quantityRepository;
+	
 	@Autowired
 	private OrderDao orderDao;
 
@@ -31,14 +39,14 @@ public class OrderService {
 	@Autowired
 	private ItemDao itemDao;
 
-	public ResponseEntity<ResponseStructure<Orders>> placeOrder(OrderRequest request){
+	public ResponseEntity<ResponseStructure<OrderDto>> placeOrder(OrderRequest request){
 		Orders order = new Orders();
 		Users user = userDao.getUser(request.getUserId());
 		
 		if(user!=null) {
 			//OrderRequest will contain a map of item name and its respective quantity
 			Map<String, Integer> itemNameAndQuantity = request.getItemNameAndQuantity();
-			Map<Items,Integer> itemAndQuantity = new LinkedHashMap<Items, Integer>();
+			Map<Items,Quantity> itemAndQuantity = new LinkedHashMap<Items, Quantity>();
 			int totalQuantity = 0;
 			double totalAmount = 0;
 			for (Map.Entry<String, Integer> entry : itemNameAndQuantity.entrySet()) {
@@ -48,12 +56,39 @@ public class OrderService {
 				//using OrderRequest's map of item name , find all the items as item names are unique
 				Items item = itemDao.findByItemName(itemName);
 				
-				//add each items price to get total amount
-				totalAmount += item.getItemPrice();
-				itemAndQuantity.put(item, quantity);
 				
-				//add the total quantity 
-				totalQuantity+=quantity;
+				if(item.isAvailable()) {				
+					if(item.getAvailableQuantity()>=quantity) {
+						
+						Quantity quantityObj = new Quantity();
+						quantityObj.setQuantity(quantity);
+						itemAndQuantity.put(item, quantityObj);
+						
+						quantityRepository.save(quantityObj);
+						
+						//add each items price to get total amount
+						totalAmount += (item.getItemPrice()*quantity);
+						
+						//reduce and set the available quantity of the item and merge 
+						int reducedItemQuantiy = item.getAvailableQuantity()-quantity;
+						item.setAvailableQuantity(reducedItemQuantiy);
+						
+						//if the reduced item quantity turns out to be zero change the isAvailable to false
+						if(reducedItemQuantiy==0) {
+							item.setAvailable(false);
+						}
+						itemDao.saveItems(item);
+						
+						//add the total quantity 
+						totalQuantity+=quantity;
+					}
+					else 
+						throw new OrderedQuantityNotAvailable();
+				}
+				else 
+					throw new OrderedQuantityNotAvailable("Item Not Available");
+					
+				
 			}
 			
 			order.setStatus(OrderStatus.COMFIRMED);
@@ -63,19 +98,69 @@ public class OrderService {
 			order.setTotalQuantity(totalQuantity);
 			order.setUser(user);
 			
-			ResponseStructure<Orders> structure = new ResponseStructure<Orders>();
+			orderDao.placeOrder(order);
+			
+			//for customized response ,use OrderDto
+			OrderDto dto = new OrderDto();
+			dto.setItemQuantity(itemNameAndQuantity);
+			dto.setPaymentMode(request.getPaymentMode());
+			dto.setStatus(OrderStatus.COMFIRMED);
+			dto.setTotalAmount(totalAmount);
+			dto.setTotalQuantity(totalQuantity);
+			
+			ResponseStructure<OrderDto> structure = new ResponseStructure<OrderDto>();
 			structure.setStatusCode(HttpStatus.CREATED.value());
 			structure.setMessage("Success");
-			structure.setData(order);
+			structure.setData(dto);
 			
-			return new ResponseEntity<ResponseStructure<Orders>>(structure,HttpStatus.CREATED);
+			return new ResponseEntity<ResponseStructure<OrderDto>>(structure,HttpStatus.CREATED);
 		}
 		else {
 			throw new UsersNotExistException();
 		}
 		
 	}
-	
-	//create a method to return total price
 
+	public ResponseEntity<ResponseStructure<OrderDto>> findById(int orderId) {
+		Orders order = orderDao.findById(orderId);
+		Map<Items, Quantity> itemAndQuantity = order.getItemQuantity();
+		Map<String,Integer> itemWithNameAndQuantity = new LinkedHashMap<String, Integer>();
+		for (Map.Entry<Items, Quantity> entry : itemAndQuantity.entrySet()) {
+			String itemName = entry.getKey().getItemName();
+			Quantity quantity = entry.getValue();
+			
+			itemWithNameAndQuantity.put(itemName, quantity.getQuantity());	
+		}
+		
+		OrderDto dto = new OrderDto();
+		dto.setStatus(order.getStatus());
+		dto.setPaymentMode(order.getPaymentMode());
+		dto.setItemQuantity(itemWithNameAndQuantity);
+		dto.setTotalAmount(order.getTotalAmount());
+		dto.setTotalQuantity(order.getTotalQuantity());
+		
+		ResponseStructure<OrderDto> structure = new ResponseStructure<OrderDto>();
+		structure.setStatusCode(HttpStatus.OK.value());
+		structure.setMessage("OK");
+		structure.setData(dto);
+		
+		return new ResponseEntity<ResponseStructure<OrderDto>>(structure,HttpStatus.OK);
+	}
+
+	public ResponseEntity<ResponseStructure<String>> removeById(int orderId) {
+		Orders order = orderDao.findById(orderId);
+		if(order!=null) {
+			orderDao.removeById(order);
+			
+			ResponseStructure<String> structure = new ResponseStructure<String>();
+			structure.setStatusCode(HttpStatus.OK.value());
+			structure.setMessage("Ok");
+			structure.setData("Successfully Deleted");
+			
+			return new ResponseEntity<ResponseStructure<String>>(structure, HttpStatus.OK);
+		}
+		else
+			throw new ItemNotFoundException("Order Not Found");
+	}
+	
 }

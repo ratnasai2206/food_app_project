@@ -2,6 +2,9 @@ package com.foodapp.foodapplication.entity;
 
 import java.util.List;
 
+import com.foodapp.foodapplication.util.UserRoles;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -27,8 +30,9 @@ public class Users {
 	@Column(unique = true)
 	private long userPhone;
 	@Enumerated(EnumType.STRING)
-	private String userRole;
+	private UserRoles  userRole;
 
+	@Schema(hidden = true)
 	@OneToMany(mappedBy = "user")
 	private List<Orders> orders;
 }

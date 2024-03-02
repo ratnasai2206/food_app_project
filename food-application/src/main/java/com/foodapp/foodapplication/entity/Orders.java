@@ -38,12 +38,11 @@ public class Orders {
 	private double totalAmount;
 	private String paymentMode;
 	
-	
 	@CreationTimestamp
 	private LocalDateTime createdDateAndTime;
 	
 	@ManyToMany
-	private Map<Items,Integer> itemQuantity;
+	private Map<Items,Quantity> itemQuantity;
 	
 	private int totalQuantity;
 	

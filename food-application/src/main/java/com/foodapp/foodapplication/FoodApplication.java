@@ -2,6 +2,7 @@ package com.foodapp.foodapplication;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -16,8 +17,11 @@ servers = {
 ) 
 public class FoodApplication {
 
+	private static ConfigurableApplicationContext applicationContext;
+	
 	public static void main(String[] args) {
-		SpringApplication.run(FoodApplication.class, args);
+		applicationContext=SpringApplication.run(FoodApplication.class, args);
+//		SpringApplication.exit(applicationContext, ()->0);
 	}
 
 }
