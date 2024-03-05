@@ -8,6 +8,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.foodapp.foodapplication.dto.ResponseStructure;
 
+import jakarta.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -58,13 +60,36 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		responseStructure.setData(idnotfoundexception.getMessage());
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.NOT_FOUND);
 	}
-	
+
 	@ExceptionHandler(OrderedQuantityNotAvailable.class)
-	public ResponseEntity<ResponseStructure<String>> catchOrderedQuantityNotAvailable(OrderedQuantityNotAvailable exception) {
+	public ResponseEntity<ResponseStructure<String>> catchOrderedQuantityNotAvailable(
+			OrderedQuantityNotAvailable exception) {
 		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
 		responseStructure.setStatusCode(HttpStatus.BAD_REQUEST.value());
 		responseStructure.setMessage("Item quantity does not match the requirement");
 		responseStructure.setData(exception.getMessage());
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(CustomValidationException.class)
+	public ResponseEntity<ResponseStructure<String>> catchCustomValidationException(
+			CustomValidationException exception) {
+		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
+		responseStructure.setStatusCode(HttpStatus.BAD_REQUEST.value());
+		responseStructure.setMessage("blah");
+		responseStructure.setData(exception.getMessage());
+
+		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<ResponseStructure<String>> catchConstraintViolationException(
+			ConstraintViolationException exception) {
+		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
+		responseStructure.setStatusCode(HttpStatus.BAD_REQUEST.value());
+		responseStructure.setMessage(exception.getMessage());
+		responseStructure.setData("Invalid input");
+
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.BAD_REQUEST);
 	}
 

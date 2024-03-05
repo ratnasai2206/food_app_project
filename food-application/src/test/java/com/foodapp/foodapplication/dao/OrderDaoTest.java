@@ -30,5 +30,4 @@ class OrderDaoTest {
 			assertTrue(false);
 		}
 	}
-
 }
