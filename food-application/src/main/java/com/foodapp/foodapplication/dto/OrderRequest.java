@@ -15,6 +15,6 @@ public class OrderRequest {
 
 	private Integer userId;
 	private Map<String,Integer> itemNameAndQuantity;
-	@NotNull
+	@NotNull(message = "provide the payment mode")
 	private String paymentMode;
 }

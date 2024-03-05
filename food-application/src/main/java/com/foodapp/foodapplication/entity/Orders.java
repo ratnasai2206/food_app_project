@@ -21,7 +21,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -39,7 +38,7 @@ public class Orders {
 	private OrderStatus status=OrderStatus.PENDING;
 	
 	private double totalAmount;
-	@NotNull
+	@NotNull(message = "provide the payment mode")
 	private String paymentMode;
 	
 	@CreationTimestamp

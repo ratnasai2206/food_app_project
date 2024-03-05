@@ -38,7 +38,7 @@ public class OrderController {
 	@PostMapping("/customer")
 	public ResponseEntity<ResponseStructure<OrderDto>> placeOrder(@Valid @RequestBody OrderRequest request ,BindingResult result) {
 		if(result.hasErrors()) {
-			throw new CustomValidationException();
+			throw new CustomValidationException(result.getFieldError().getDefaultMessage());
 		}
 		return orderService.placeOrder(request);
 	}
