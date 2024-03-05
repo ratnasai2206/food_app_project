@@ -14,6 +14,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,11 +29,19 @@ public class Users {
 	@GeneratedValue(strategy = GenerationType.IDENTITY, generator = "user_id")
 	@SequenceGenerator(name = "user_id", initialValue = 1, allocationSize = 1, sequenceName = "user_sequence")
 	private int userId;
+
+	@NotNull(message = "Username cannot be blank")
+	@Size(min = 2, max = 50, message = "Username must be between 2 and 50 characters")
 	private String userName;
+
+	@NotNull(message = "User phone cannot be null")
+	@Pattern(regexp = "^\\d{10}$", message = "User phone must be a 10-digit number")
 	@Column(unique = true)
 	private long userPhone;
+	
+	@NotNull(message = "User role cannot be null")
 	@Enumerated(EnumType.STRING)
-	private UserRoles  userRole;
+	private UserRoles userRole;
 
 	@Schema(hidden = true)
 	@OneToMany(mappedBy = "user")

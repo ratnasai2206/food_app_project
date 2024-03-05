@@ -2,6 +2,7 @@ package com.foodapp.foodapplication.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 
 @RestController
 @RequestMapping("/foodapp/user")
@@ -32,9 +34,12 @@ public class UserController {
 	@ApiResponses(value = { @ApiResponse(description = "Customer Created", responseCode = "201"),
 			@ApiResponse(content = @Content(), responseCode = "400") })
 	@PostMapping(value = "/customer")
-	public ResponseEntity<ResponseStructure<Users>> saveCustomer(@Valid @RequestBody UserDto user) {
-
+	public ResponseEntity<ResponseStructure<Users>> saveCustomer(@Valid @RequestBody UserDto user,BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			throw new ValidationException();
+		}
 		return userService.saveCustomer(user);
+		
 	}
 
 	@Operation(description = "To Create Staff info", summary = "Staff will be saved in the database")
