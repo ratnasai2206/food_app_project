@@ -101,15 +101,8 @@ public class OrderService {
 			orderDao.placeOrder(order);
 			
 			//for customized response ,use OrderDto
-			Map<String,Quantity> itemWithNameAndQuantity = new LinkedHashMap<String, Quantity>();
-			for (Map.Entry<Items, Quantity> entry : itemAndQuantity.entrySet()) {
-				String itemName = entry.getKey().getItemName();
-				Quantity quantity = entry.getValue();
-				
-				itemWithNameAndQuantity.put(itemName, quantity);	
-			}
 			OrderDto dto = new OrderDto();
-			dto.setItemQuantity(itemWithNameAndQuantity);
+			dto.setItemQuantity(itemNameAndQuantity);
 			dto.setPaymentMode(request.getPaymentMode());
 			dto.setStatus(OrderStatus.COMFIRMED);
 			dto.setTotalAmount(totalAmount);
@@ -131,12 +124,12 @@ public class OrderService {
 	public ResponseEntity<ResponseStructure<OrderDto>> findById(int orderId) {
 		Orders order = orderDao.findById(orderId);
 		Map<Items, Quantity> itemAndQuantity = order.getItemQuantity();
-		Map<String,Quantity> itemWithNameAndQuantity = new LinkedHashMap<String, Quantity>();
+		Map<String,Integer> itemWithNameAndQuantity = new LinkedHashMap<String, Integer>();
 		for (Map.Entry<Items, Quantity> entry : itemAndQuantity.entrySet()) {
 			String itemName = entry.getKey().getItemName();
 			Quantity quantity = entry.getValue();
 			
-			itemWithNameAndQuantity.put(itemName, quantity);	
+			itemWithNameAndQuantity.put(itemName, quantity.getQuantity());	
 		}
 		
 		OrderDto dto = new OrderDto();
