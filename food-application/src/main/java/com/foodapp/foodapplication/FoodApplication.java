@@ -17,13 +17,12 @@ servers = {
 ) 
 public class FoodApplication {
 
-	private static ConfigurableApplicationContext applicationContext;
+	private static ConfigurableApplicationContext applicationContext;													
 	
 	public static void main(String[] args) {
 		applicationContext=SpringApplication.run(FoodApplication.class, args);
 //		SpringApplication.exit(applicationContext, ()->0);
-//		SpringApplication.exit(applicationContext);
-//		System.exit(0);
+		
 	}
 
 }
