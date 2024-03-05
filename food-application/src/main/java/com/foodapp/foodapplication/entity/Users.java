@@ -27,7 +27,6 @@ public class Users {
 	@SequenceGenerator(name = "user_id", initialValue = 1, allocationSize = 1, sequenceName = "user_sequence")
 	private int userId;
 	private String userName;
-	
 	@Column(unique = true)
 	private long userPhone;
 	@Enumerated(EnumType.STRING)
