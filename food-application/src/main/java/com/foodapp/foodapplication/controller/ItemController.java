@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.foodapp.foodapplication.dto.ResponseStructure;
 import com.foodapp.foodapplication.entity.Items;
+import com.foodapp.foodapplication.excpection.CustomValidationException;
 import com.foodapp.foodapplication.services.ItemService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -53,6 +54,10 @@ public class ItemController {
 	public ResponseEntity<ResponseStructure<Items>> updateProduct(@Valid @RequestBody Items item, @PathVariable int userId,
 			@PathVariable int itemId, BindingResult result) {
 
+		if(result.hasErrors())
+		{
+			throw new CustomValidationException();
+		}
 		return itemService.updateItem(item, userId, itemId);
 
 	}
