@@ -8,6 +8,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.foodapp.foodapplication.dto.ResponseStructure;
 
+import jakarta.validation.ConstraintViolationException;
+
 @ControllerAdvice
 public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
 
@@ -67,5 +69,14 @@ public class ApplicationExceptionHandler extends ResponseEntityExceptionHandler 
 		responseStructure.setData(exception.getMessage());
 		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.BAD_REQUEST);
 	}
+	
+//	@ExceptionHandler(ConstraintViolationException.class)
+//	public ResponseEntity<ResponseStructure<String>> catchContraintValidationException(ConstraintViolationException exception) {
+//		ResponseStructure<String> responseStructure = new ResponseStructure<String>();
+//		responseStructure.setStatusCode(HttpStatus.BAD_REQUEST.value());
+//		responseStructure.setMessage("Contraint doesn't satified");
+//		responseStructure.setData(exception.getMessage());
+//		return new ResponseEntity<ResponseStructure<String>>(responseStructure, HttpStatus.BAD_REQUEST);
+//	}
 
 }

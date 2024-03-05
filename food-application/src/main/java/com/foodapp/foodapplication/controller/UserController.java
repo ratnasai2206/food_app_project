@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
 
 @RestController
 @RequestMapping("/foodapp/user")
@@ -35,9 +34,6 @@ public class UserController {
 			@ApiResponse(content = @Content(), responseCode = "400") })
 	@PostMapping(value = "/customer")
 	public ResponseEntity<ResponseStructure<Users>> saveCustomer(@Valid @RequestBody UserDto user,BindingResult bindingResult) {
-		if(bindingResult.hasErrors()) {
-			throw new ValidationException();
-		}
 		return userService.saveCustomer(user);
 		
 	}
