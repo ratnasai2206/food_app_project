@@ -1,6 +1,11 @@
 package com.foodapp.foodapplication.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,29 +23,57 @@ class ItemDaoTest {
 
 	@Autowired
 	ItemDao items;
-	
+
 	@Autowired
 	ItemRepository itemRepository;
+
 
 	@Test
 	void testSaveItem() {
 		Items item = new Items();
-		item.setItemName("Chef Shawarma Roll");
+		item.setItemName("Burger Americano");
 		item.setItemPrice(190.50);
-		item.setItemType("Shawarma");
+		item.setItemType("Burger");
 		item.setAvailableQuantity(300);
-		
+
 		assertEquals(item, items.saveItems(item));
 	}
+
+	@Test
+	void testGetAllItems() {
+
+		List<Items> itemList = itemRepository.findAll();
+		assertNotNull(itemList);
+	}
+
 	
-	void testGetAllItems()
-	{
-		
+	@Test
+	void testGetItemById() {
+
+		Optional<Items> item = itemRepository.findById(302);
+		assertNotNull(item.get());
 	}
 	
-	void testGetItemById()
-	{
-		assertEquals(itemRepository.findById(301), items.getItemById(301));
+	
+	@Test
+	void testDeleteItem() {
+
+		Optional<Items> item = itemRepository.findById(302);
+		if (item.isPresent()) {
+			Items items = item.get();
+			itemRepository.delete(items);
+			assertTrue(true);
+		} else {
+			assertTrue(false);
+		}
+		assertTrue(true);
 	}
 
 }
+		
+	
+	
+	
+	
+
+
