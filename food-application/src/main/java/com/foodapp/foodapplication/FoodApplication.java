@@ -22,6 +22,8 @@ public class FoodApplication {
 	public static void main(String[] args) {
 		applicationContext=SpringApplication.run(FoodApplication.class, args);
 //		SpringApplication.exit(applicationContext, ()->0);
+//		SpringApplication.exit(applicationContext);
+//		System.exit(0);
 	}
 
 }
