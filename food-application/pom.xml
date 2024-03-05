@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.foodapp</groupId>
 	<artifactId>food-application</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version> 
 	<name>food-application</name>
 	<description>Application for the Hotel Food Application</description>
 	<properties>

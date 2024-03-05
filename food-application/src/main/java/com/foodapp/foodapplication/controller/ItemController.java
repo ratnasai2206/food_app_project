@@ -1,6 +1,6 @@
 package com.foodapp.foodapplication.controller;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/foodapp/items")
@@ -36,7 +37,7 @@ public class ItemController {
 			@ApiResponse(content = @Content(), responseCode = "400") })
 
 	@PostMapping("/{userId}")
-	public ResponseEntity<ResponseStructure<Items>> saveItem(@RequestBody Items item, @PathVariable int userId) {
+	public ResponseEntity<ResponseStructure<Items>> saveItem(@Valid @RequestBody Items item, @PathVariable int userId) {
 
 		return itemService.saveItem(item, userId);
 
@@ -47,7 +48,6 @@ public class ItemController {
 	@ApiResponses(value = { @ApiResponse(description = "Item Updated", responseCode = "200"),
 
 			@ApiResponse(content = @Content(), responseCode = "400") })
-
 	@PutMapping("/{userId}/{itemId}")
 	public ResponseEntity<ResponseStructure<Items>> updateProduct(@RequestBody Items item, @PathVariable int userId,
 			@PathVariable int itemId) {
@@ -73,7 +73,7 @@ public class ItemController {
 	@ApiResponses(value = { @ApiResponse(description = "User found", responseCode = "200"),
 
 			@ApiResponse(content = @Content(), responseCode = "400") })
-	
+
 	@DeleteMapping("/{userId}/{itemId}")
 	public ResponseEntity<ResponseStructure<String>> deleteItem(@PathVariable int userId, @PathVariable int itemId) {
 
@@ -81,13 +81,12 @@ public class ItemController {
 
 	}
 
-
 	@Operation(description = "To get Items by id", summary = "Items list will be fetched from the database")
 
 	@ApiResponses(value = { @ApiResponse(description = "Item found", responseCode = "200"),
 
 			@ApiResponse(content = @Content(), responseCode = "400") })
-	
+
 	@GetMapping("/{itemId}")
 	public ResponseEntity<ResponseStructure<Items>> getItemById(@PathVariable int itemId) {
 
