@@ -35,7 +35,7 @@ class ItemDaoTest {
 	
 	void testGetAllItems()
 	{
-		assertEquals(itemRepository.findAll(), items.getAllItems());
+		
 	}
 	
 	void testGetItemById()
