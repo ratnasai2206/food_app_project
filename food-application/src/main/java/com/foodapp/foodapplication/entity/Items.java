@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
-import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PositiveOrZero;
@@ -28,7 +28,7 @@ public class Items {
 	@NotBlank(message = "Name is required")
 	private String itemName;
 	@NotNull(message = "Price is required")
-	@DecimalMin(value = "0.01", message = "Price must be greater than zero")
+	@Min(value = 50, message = "Price must be greater than zero")
 	private double itemPrice;
 	@NotBlank(message = "Type is required")
 	private String itemType;

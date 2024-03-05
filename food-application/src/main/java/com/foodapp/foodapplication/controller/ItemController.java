@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,8 +50,8 @@ public class ItemController {
 
 			@ApiResponse(content = @Content(), responseCode = "400") })
 	@PutMapping("/{userId}/{itemId}")
-	public ResponseEntity<ResponseStructure<Items>> updateProduct(@RequestBody Items item, @PathVariable int userId,
-			@PathVariable int itemId) {
+	public ResponseEntity<ResponseStructure<Items>> updateProduct(@Valid @RequestBody Items item, @PathVariable int userId,
+			@PathVariable int itemId, BindingResult result) {
 
 		return itemService.updateItem(item, userId, itemId);
 
